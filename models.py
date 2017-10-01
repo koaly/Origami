@@ -10,6 +10,16 @@ class Point:
     def update(self, delta):
         self.y -= self.speed
 
+class Death:
+    def __init__(self, world, x, y):
+        self.world = world
+        self.x = x
+        self.y = y
+        self.speed = 3
+    
+    def update(self, delta):
+        self.y -= self.speed
+
 class Plane:
     def __init__(self, world, x, y):
         self.world = world
@@ -41,6 +51,7 @@ class World:
         self.leftPlane = Plane(self, 62, 100)
         self.rightPlane = Plane(self, 312, 100)
         self.point = Point(self, 62, 770)
+        self.death = Death(self, 312, 770)
  
     def on_key_press(self, key, key_modifiers):
         if key == arcade.key.LEFT:
@@ -72,16 +83,22 @@ class World:
         self.leftPlane.update(delta)
         self.rightPlane.update(delta)
         self.point.update(delta)
+        self.death.update(delta)
 
         if self.point.y < 10:
             self.life -= 1
-            if life == 0:
+            if self.life == 0:
                 self.point.y = 10
             else:
                 self.point.y = 770
             self.point.speed = 0
 
         if self.leftPlane.get(self.point):
-            #self.point.y = 770
+            self.point.y = 770
             self.point.speed = 0
             self.score += 1
+
+        if self.rightPlane.get(self.death):
+            self.death.y = 770
+            self.death.speed = 0
+            self.life -= 1
