@@ -36,6 +36,9 @@ class TwinWindow(arcade.Window):
         self.rightPlane_sprite = ModelSprite('images/plane.png',model=self.world.rightPlane)
         self.rightPlane_sprite.set_position(312,100)
 
+    def on_key_press(self, key, key_modifiers):
+        self.world.on_key_press(key, key_modifiers)
+
     def update(self, delta):
         self.world.update(delta)
 
