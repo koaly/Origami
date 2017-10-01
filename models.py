@@ -75,7 +75,10 @@ class World:
 
         if self.point.y < 10:
             self.life -= 1
-            self.point.y = 10
+            if life == 0:
+                self.point.y = 10
+            else:
+                self.point.y = 770
             self.point.speed = 0
 
         if self.leftPlane.get(self.point):
