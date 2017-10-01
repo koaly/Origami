@@ -6,7 +6,6 @@ class Plane:
         self.x = x
         self.y = y
         self.move = 0
-        self.pos = 0
  
     def update(self, delta):
         if self.x != 188 and self.x != 438 and self.x != 62 and self.x != 312:
@@ -15,11 +14,8 @@ class Plane:
             elif self.move == 2:
                 self.x -= 6
         else:
-            if self.move == 1: 
-                self.pos = 1
-            elif self.move == 2: 
-                self.pos = 0 
-            self.move = 0
+            if self.move != 0:
+                self.move = 0
  
  
 class World:
@@ -33,7 +29,7 @@ class World:
     def on_key_press(self, key, key_modifiers):
         if key == arcade.key.D:
             if self.leftPlane.move == 0:
-                if self.leftPlane.pos == 0:
+                if self.leftPlane.x == 62:
                     self.leftPlane.x += 6 
                     self.leftPlane.move = 1
                 else:
@@ -45,7 +41,7 @@ class World:
                 self.leftPlane.move = 1
         if key == arcade.key.J:
             if self.rightPlane.move == 0:
-                if self.rightPlane.pos == 0:
+                if self.rightPlane.x == 312:
                     self.rightPlane.x += 6 
                     self.rightPlane.move = 1
                 else:
