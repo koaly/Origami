@@ -30,11 +30,8 @@ class TwinWindow(arcade.Window):
         self.background.set_position(250,375)
  
         self.leftPlane_sprite = ModelSprite('images/plane.png',model=self.world.leftPlane)
-        self.leftPlane_sprite.set_position(62,100)
-
-
         self.rightPlane_sprite = ModelSprite('images/plane.png',model=self.world.rightPlane)
-        self.rightPlane_sprite.set_position(312,100)
+        self.point_sprite = ModelSprite('images/cookie.png',model=self.world.point)
 
     def on_key_press(self, key, key_modifiers):
         self.world.on_key_press(key, key_modifiers)
@@ -49,6 +46,16 @@ class TwinWindow(arcade.Window):
  
         self.leftPlane_sprite.draw()
         self.rightPlane_sprite.draw()
+        self.point_sprite.draw()
+
+        if self.world.score >= 100:
+            arcade.draw_text(str(self.world.score), self.width - 50, self.height - 30, arcade.color.WHITE, 20)
+        elif self.world.score >= 10:
+            arcade.draw_text(str(self.world.score), self.width - 33, self.height - 30, arcade.color.WHITE, 20)
+        else:
+            arcade.draw_text(str(self.world.score), self.width - 20, self.height - 30, arcade.color.WHITE, 20)
+        arcade.draw_text(str(self.world.life), 8, self.height - 30, arcade.color.WHITE, 20)
+
  
 def main():
     window = TwinWindow(SCREEN_WIDTH, SCREEN_HEIGHT)
