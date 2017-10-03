@@ -1,6 +1,6 @@
 import arcade.key
 
-class Point:
+class Object:
     def __init__(self, world, x, y):
         self.world = world
         self.x = x
@@ -10,15 +10,13 @@ class Point:
     def update(self, delta):
         self.y -= self.speed
 
-class Death:
+class Point(Object):
     def __init__(self, world, x, y):
-        self.world = world
-        self.x = x
-        self.y = y
-        self.speed = 3
-    
-    def update(self, delta):
-        self.y -= self.speed
+        super().__init__(world, x, y)
+
+class Death(Object):
+    def __init__(self, world, x, y):
+        super().__init__(world, x, y)
 
 class Plane:
     def __init__(self, world, x, y):
