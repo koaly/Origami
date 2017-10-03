@@ -34,6 +34,9 @@ class TwinWindow(arcade.Window):
         self.leftObject_sprite = []
         self.rightObject_sprite = []
 
+        self.left_len = 0
+        self.right_len = 0
+
         #self.point_sprite = ModelSprite('images/cookie.png',model=self.world.point)
         #self.death_sprite = ModelSprite('images/water.png',model=self.world.death)
 
@@ -41,12 +44,14 @@ class TwinWindow(arcade.Window):
         self.world.on_key_press(key, key_modifiers)
 
     def update(self, delta):
-        if (delta+1) % 5 == 0:
-            if self.world.leftCheck[0] == 0:
-                self.leftObject_sprite.append(ModelSprite('images/cookie.png',model=self.world.leftObject[0]))
-            elif self.world.leftCheck[0] == 1:
-                self.leftObject_sprite.append(ModelSprite('images/water.png',model=self.world.leftObject[0]))
-        print(delta)
+        if self.world.time == 0:
+            #if self.world.leftCreate:
+                if len(self.world.leftCheck) != 0 and len(self.world.leftObject) != 0 and self.left_len != len(self.world.leftObject):
+                    self.left_len = len(self.world.leftObject)
+                    if self.world.leftCheck[0] == 0:
+                        self.leftObject_sprite.append(ModelSprite('images/cookie.png',model=self.world.leftObject[0]))
+                    elif self.world.leftCheck[0] == 1:
+                        self.leftObject_sprite.append(ModelSprite('images/water.png',model=self.world.leftObject[0]))
         self.world.update(delta)
 
     def on_draw(self):

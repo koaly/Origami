@@ -47,6 +47,8 @@ class World:
         self.width = width
         self.height = height
 
+        self.time = 0
+
         self.life = 1
         self.score = 0
 
@@ -55,6 +57,9 @@ class World:
 
         self.leftCheck = []
         self.rightCheck = []
+
+        self.leftCreate = True
+        self.rightCreate = True
 
         self.leftPlane = Plane(self, 62, 100)
         self.rightPlane = Plane(self, 312, 100)
@@ -89,46 +94,49 @@ class World:
                 self.rightPlane.move = 1        
 
     def update(self, delta):
+        self.time += delta
         self.leftPlane.update(delta)
         self.rightPlane.update(delta)
+        print (self.leftObject)
 
-        if delta % 5 == 0:
+        if self.time > 0.7:
+            self.time = 0
             left_pos = randint(0,2)
             left_obj = randint(0,1)
             if left_pos == 0:
                 if left_obj == 0:
-                    self.leftObject = [Point(self, 62, 770)] + self.leftObject
+                    self.leftObject = [Point(self, 62, 800)] + self.leftObject
                     self.leftCheck = [0] + self.leftCheck
                 else:
-                    self.leftObject = [Death(self, 62, 770)] + self.leftObject
+                    self.leftObject = [Death(self, 62, 800)] + self.leftObject
                     self.leftCheck = [1] + self.leftCheck
             elif left_pos == 1:
                 if left_obj == 0:
-                    self.leftObject = [Point(self, 188, 770)] + self.leftObject
+                    self.leftObject = [Point(self, 188, 800)] + self.leftObject
                     self.leftCheck = [0] + self.leftCheck
                 else:
-                    self.leftObject = [Death(self, 188, 770)] + self.leftObject
+                    self.leftObject = [Death(self, 188, 800)] + self.leftObject
                     self.leftCheck = [1] + self.leftCheck
             else:
-                self.leftCheck = [2] + self.leftCheck 
+                self.leftCheck = [2] + self.leftCheck
         
         for obj in self.leftObject:
             obj.update(delta)
             if self.leftPlane.get(obj):
+                obj.y = 800
+                obj.speed = 0
                 if obj.cls == 0:
-                    #self.point.y = 770
-                    #self.point.speed = 0
                     self.score += 1
                 elif obj.cls == 1:
-                    #self.death.y = 770
-                    #self.death.speed = 0
                     self.life -= 1
-                self.leftObject.pop(0)
+                #self.leftObject.pop()
 
             if obj.y < 10:
                 if obj.cls == 0:    
                     self.life -= 1
-                self.leftObject.pop(0)
+                obj.y = 800
+                obj.speed = 0
+                #self.leftObject.pop
 
         for obj in self.rightObject:
             obj.update(delta)
