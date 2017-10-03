@@ -1,4 +1,5 @@
 import arcade.key
+from random import randint
 
 class Object:
     def __init__(self, world, x, y):
@@ -13,10 +14,12 @@ class Object:
 class Point(Object):
     def __init__(self, world, x, y):
         super().__init__(world, x, y)
+        self.cls = 0
 
 class Death(Object):
     def __init__(self, world, x, y):
         super().__init__(world, x, y)
+        self.cls = 1
 
 class Plane:
     def __init__(self, world, x, y):
@@ -46,10 +49,18 @@ class World:
 
         self.life = 1
         self.score = 0
+
+        self.leftObject = []
+        self.rightObject = []
+
+        self.leftCheck = []
+        self.rightCheck = []
+
         self.leftPlane = Plane(self, 62, 100)
         self.rightPlane = Plane(self, 312, 100)
-        self.point = Point(self, 62, 770)
-        self.death = Death(self, 312, 770)
+
+        #self.point = Point(self, 62, 770)
+        #self.death = Death(self, 312, 770)
  
     def on_key_press(self, key, key_modifiers):
         if key == arcade.key.LEFT:
@@ -80,23 +91,47 @@ class World:
     def update(self, delta):
         self.leftPlane.update(delta)
         self.rightPlane.update(delta)
-        self.point.update(delta)
-        self.death.update(delta)
 
-        if self.point.y < 10:
-            self.life -= 1
-            if self.life == 0:
-                self.point.y = 10
+        if delta % 5 == 0:
+            left_pos = randint(0,2)
+            left_obj = randint(0,1)
+            if left_pos == 0:
+                if left_obj == 0:
+                    self.leftObject = [Point(self, 62, 770)] + self.leftObject
+                    self.leftCheck = [0] + self.leftCheck
+                else:
+                    self.leftObject = [Death(self, 62, 770)] + self.leftObject
+                    self.leftCheck = [1] + self.leftCheck
+            elif left_pos == 1:
+                if left_obj == 0:
+                    self.leftObject = [Point(self, 188, 770)] + self.leftObject
+                    self.leftCheck = [0] + self.leftCheck
+                else:
+                    self.leftObject = [Death(self, 188, 770)] + self.leftObject
+                    self.leftCheck = [1] + self.leftCheck
             else:
-                self.point.y = 770
-            self.point.speed = 0
+                self.leftCheck = [2] + self.leftCheck 
+        
+        for obj in self.leftObject:
+            obj.update(delta)
+            if self.leftPlane.get(obj):
+                if obj.cls == 0:
+                    #self.point.y = 770
+                    #self.point.speed = 0
+                    self.score += 1
+                elif obj.cls == 1:
+                    #self.death.y = 770
+                    #self.death.speed = 0
+                    self.life -= 1
+                self.leftObject.pop(0)
 
-        if self.leftPlane.get(self.point):
-            self.point.y = 770
-            self.point.speed = 0
-            self.score += 1
+            if obj.y < 10:
+                if obj.cls == 0:    
+                    self.life -= 1
+                self.leftObject.pop(0)
 
-        if self.rightPlane.get(self.death):
-            self.death.y = 770
-            self.death.speed = 0
-            self.life -= 1
+        for obj in self.rightObject:
+            obj.update(delta)
+            
+        #self.point.update(delta)
+        #self.death.update(delta)
