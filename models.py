@@ -98,38 +98,49 @@ class World:
             else:
                 self.rightPlane.move = 1        
 
-    def update(self, delta):
-        self.time += delta
-        self.leftPlane.update(delta)
-        self.rightPlane.update(delta)
-        print (self.leftObject)
-
-        #if len(self.leftCheck) > 11 or len(self.leftObject) > 11:
-        #    self.leftObject.pop()
-        #   self.leftCheck.pop()
-
-        if self.time > 0.8:
-            self.time = 0
-            left_pos = randint(0,10)
-            left_obj = randint(0,1)
-            if left_pos >= 0 and left_pos <= 4:
-                if left_obj == 0:
-                    self.leftObject = [Point(self, 62, 800)] + self.leftObject
-                    self.leftCheck = [0] + self.leftCheck
-                else:
-                    self.leftObject = [Death(self, 62, 800)] + self.leftObject
-                    self.leftCheck = [1] + self.leftCheck
-            elif left_pos >= 4 and left_pos <= 9:
-                if left_obj == 0:
-                    self.leftObject = [Point(self, 188, 800)] + self.leftObject
-                    self.leftCheck = [0] + self.leftCheck
-                else:
-                    self.leftObject = [Death(self, 188, 800)] + self.leftObject
-                    self.leftCheck = [1] + self.leftCheck
+    def left_random(self):
+        left_pos = randint(0,10)
+        left_obj = randint(0,1)
+        if left_pos >= 0 and left_pos <= 4:
+            if left_obj == 0:
+                self.leftObject = [Point(self, 62, 800)] + self.leftObject
+                self.leftCheck = [0] + self.leftCheck
             else:
-                self.leftObject = [Tmp(self, 62, 800)] + self.leftObject
-                self.leftCheck = [2] + self.leftCheck
-        
+                self.leftObject = [Death(self, 62, 800)] + self.leftObject
+                self.leftCheck = [1] + self.leftCheck
+        elif left_pos >= 4 and left_pos <= 9:
+            if left_obj == 0:
+                self.leftObject = [Point(self, 188, 800)] + self.leftObject
+                self.leftCheck = [0] + self.leftCheck
+            else:
+                self.leftObject = [Death(self, 188, 800)] + self.leftObject
+                self.leftCheck = [1] + self.leftCheck
+        else:
+            self.leftObject = [Tmp(self, 62, 800)] + self.leftObject
+            self.leftCheck = [2] + self.leftCheck
+    
+    def right_random(self):
+        right_pos = randint(0,10)
+        right_obj = randint(0,1)
+        if right_pos >= 0 and right_pos <= 4:
+            if right_obj == 0:
+                self.rightObject = [Point(self, 312, 800)] + self.rightObject
+                self.rightCheck = [0] + self.rightCheck
+            else:
+                self.rightObject = [Death(self, 312, 800)] + self.rightObject
+                self.rightCheck = [1] + self.rightCheck
+        elif right_pos >= 4 and right_pos <= 9:
+            if right_obj == 0:
+                self.rightObject = [Point(self, 438, 800)] + self.rightObject
+                self.rightCheck = [0] + self.rightCheck
+            else:
+                self.rightObject = [Death(self, 438, 800)] + self.rightObject
+                self.rightCheck = [1] + self.rightCheck
+        else:
+            self.rightObject = [Tmp(self, 312, 800)] + self.rightObject
+            self.rightCheck = [2] + self.rightCheck
+
+    def left_update(self, delta):
         for obj in self.leftObject:
             obj.update(delta)
             if self.leftPlane.get(obj):
@@ -149,9 +160,43 @@ class World:
                 obj.speed = 0
                 #self.leftObject.pop()
                 #self.leftCheck.pop()
-
+    
+    def right_update(self, delta):
         for obj in self.rightObject:
             obj.update(delta)
-            
+            if self.rightPlane.get(obj):
+                obj.y = 800
+                obj.speed = 0
+                if obj.cls == 0:
+                    self.score += 1
+                elif obj.cls == 1:
+                    self.life -= 1
+                #self.leftObject.pop()
+                #self.leftCheck.pop()
+
+            if obj.y < 10:
+                if obj.cls == 0:    
+                    self.life -= 1
+                obj.y = 800
+                obj.speed = 0
+
+    def update(self, delta):
+        self.time += delta
+        self.leftPlane.update(delta)
+        self.rightPlane.update(delta)
+        #print (self.leftObject)
+
+        #if len(self.leftCheck) > 11 or len(self.leftObject) > 11:
+        #    self.leftObject.pop()
+        #    self.leftCheck.pop()
+
+        if self.time > 0.8:
+            self.time = 0
+            self.left_random()
+            self.right_random()
+
+        self.left_update(delta)
+        self.right_update(delta)
+        
         #self.point.update(delta)
         #self.death.update(delta)

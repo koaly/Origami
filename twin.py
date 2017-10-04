@@ -46,20 +46,33 @@ class TwinWindow(arcade.Window):
     def update(self, delta):
         print (self.leftObject_sprite)
         if len(self.leftObject_sprite) > 11:
-            self.leftObject_sprite.pop()
+           self.leftObject_sprite.pop()
+
+        if len(self.rightObject_sprite) > 11:
+            self.rightObject_sprite.pop()
             
         if self.world.time == 0:
-            #if self.world.leftCreate:
-                if len(self.world.leftCheck) != 0 and len(self.world.leftObject) != 0 and self.left_len != len(self.world.leftObject):
-                    self.left_len = len(self.world.leftObject)
-                    if self.world.leftCheck[0] == 0:
-                        #self.leftObject_sprite.append(ModelSprite('images/cookie.png',model=self.world.leftObject[0]))
-                        self.leftObject_sprite = [ModelSprite('images/cookie.png',model=self.world.leftObject[0])] + self.leftObject_sprite
-                    elif self.world.leftCheck[0] == 1:
-                        #self.leftObject_sprite.append(ModelSprite('images/water.png',model=self.world.leftObject[0]))
-                        self.leftObject_sprite = [ModelSprite('images/water.png',model=self.world.leftObject[0])] + self.leftObject_sprite
-                    else:
-                        self.leftObject_sprite = [ModelSprite('images/tmp.png',model=self.world.leftObject[0])] + self.leftObject_sprite
+            if len(self.world.leftCheck) != 0 and len(self.world.leftObject) != 0 and self.left_len != len(self.world.leftObject):
+                self.left_len = len(self.world.leftObject)
+                if self.world.leftCheck[0] == 0:
+                    #self.leftObject_sprite.append(ModelSprite('images/cookie.png',model=self.world.leftObject[0]))
+                    self.leftObject_sprite = [ModelSprite('images/cookie.png',model=self.world.leftObject[0])] + self.leftObject_sprite
+                elif self.world.leftCheck[0] == 1:
+                    #self.leftObject_sprite.append(ModelSprite('images/water.png',model=self.world.leftObject[0]))
+                    self.leftObject_sprite = [ModelSprite('images/water.png',model=self.world.leftObject[0])] + self.leftObject_sprite
+                else:
+                    self.leftObject_sprite = [ModelSprite('images/tmp.png',model=self.world.leftObject[0])] + self.leftObject_sprite
+       
+            if len(self.world.rightCheck) != 0 and len(self.world.rightObject) != 0 and self.right_len != len(self.world.rightObject):
+                self.right_len = len(self.world.rightObject)
+                if self.world.rightCheck[0] == 0:
+                    #self.leftObject_sprite.append(ModelSprite('images/cookie.png',model=self.world.leftObject[0]))
+                    self.rightObject_sprite = [ModelSprite('images/cookie.png',model=self.world.rightObject[0])] + self.rightObject_sprite
+                elif self.world.rightCheck[0] == 1:
+                    #self.leftObject_sprite.append(ModelSprite('images/water.png',model=self.world.leftObject[0]))
+                    self.rightObject_sprite = [ModelSprite('images/water.png',model=self.world.rightObject[0])] + self.rightObject_sprite
+                else:
+                    self.rightObject_sprite = [ModelSprite('images/tmp.png',model=self.world.rightObject[0])] + self.rightObject_sprite
                 
 
         self.world.update(delta)
@@ -76,6 +89,11 @@ class TwinWindow(arcade.Window):
             if i > 10:
                 break
             self.leftObject_sprite[i].draw()
+
+        for i in range(0, len(self.rightObject_sprite)):
+            if i > 10:
+                break
+            self.rightObject_sprite[i].draw()
 
         #for leftDrop in self.leftObject_sprite:
         #    leftDrop.draw()
