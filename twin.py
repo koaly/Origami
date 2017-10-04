@@ -37,6 +37,8 @@ class TwinWindow(arcade.Window):
         self.left_len = 0
         self.right_len = 0
 
+        self.scoreboard = arcade.Sprite('images/score.png')
+        self.scoreboard.set_position(250,height//2)
         #self.point_sprite = ModelSprite('images/cookie.png',model=self.world.point)
         #self.death_sprite = ModelSprite('images/water.png',model=self.world.death)
 
@@ -108,6 +110,14 @@ class TwinWindow(arcade.Window):
             arcade.draw_text(str(self.world.score), self.width - 20, self.height - 30, arcade.color.WHITE, 20)
         arcade.draw_text(str(self.world.life), 8, self.height - 30, arcade.color.WHITE, 20)
 
+        if self.world.life == 0:
+            self.scoreboard.draw()
+            if self.world.score >= 100:
+                arcade.draw_text(str(self.world.score), self.width//2-80, self.height//2, arcade.color.WHITE, 80)
+            elif self.world.score >= 10:
+                arcade.draw_text(str(self.world.score), self.width//2-50, self.height//2, arcade.color.WHITE, 80)
+            else:
+                arcade.draw_text(str(self.world.score), self.width//2-25, self.height//2, arcade.color.WHITE, 80)
  
 def main():
     window = TwinWindow(SCREEN_WIDTH, SCREEN_HEIGHT)

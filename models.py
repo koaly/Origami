@@ -60,7 +60,7 @@ class World:
         self.gap = 0.85
 
         self.life = 1
-        self.score = 0
+        self.score = 10
 
         self.leftObject = []
         self.rightObject = []
@@ -208,21 +208,22 @@ class World:
 
     def update(self, delta):
         self.time += delta
-        self.leftPlane.update(delta)
-        self.rightPlane.update(delta)
-        #print (self.leftObject)
-        print (self.speed)
-        #if len(self.leftCheck) > 11 or len(self.leftObject) > 11:
-        #    self.leftObject.pop()
-        #    self.leftCheck.pop()
+        if self.life > 0:
+            self.leftPlane.update(delta)
+            self.rightPlane.update(delta)
+            #print (self.leftObject)
+            print (self.speed)
+            #if len(self.leftCheck) > 11 or len(self.leftObject) > 11:
+            #    self.leftObject.pop()
+            #    self.leftCheck.pop()
 
-        if self.time > self.gap:
-            self.time = 0
-            self.left_random()
-            self.right_random()
+            if self.time > self.gap:
+                self.time = 0
+                self.left_random()
+                self.right_random()
 
-        self.left_update(delta)
-        self.right_update(delta)
+            self.left_update(delta)
+            self.right_update(delta)
         
         #self.point.update(delta)
         #self.death.update(delta)
