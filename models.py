@@ -6,10 +6,9 @@ class Object:
         self.world = world
         self.x = x
         self.y = y
-        self.speed = 3
     
     def update(self, delta):
-        self.y -= self.speed
+        self.y -= World.speed
 
 class Point(Object):
     def __init__(self, world, x, y):
@@ -53,6 +52,7 @@ class World:
         self.height = height
 
         self.time = 0
+        self.speed = 3
 
         self.life = 1
         self.score = 0
@@ -154,8 +154,9 @@ class World:
                 #self.leftCheck.pop()
 
             if obj.y < 10:
-                if obj.cls == 0:    
-                    self.life -= 1
+                if obj.cls == 0:
+                    if self.life > 0:  
+                        self.life -= 1
                 obj.y = 800
                 obj.speed = 0
                 #self.leftObject.pop()
@@ -169,6 +170,8 @@ class World:
                 obj.speed = 0
                 if obj.cls == 0:
                     self.score += 1
+                    if self.score % 20 == 0:
+                        
                 elif obj.cls == 1:
                     self.life -= 1
                 #self.leftObject.pop()
