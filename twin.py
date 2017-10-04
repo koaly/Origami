@@ -44,7 +44,7 @@ class TwinWindow(arcade.Window):
         self.world.on_key_press(key, key_modifiers)
 
     def update(self, delta):
-        print (self.leftObject_sprite)
+        #print (self.leftObject_sprite)
         if len(self.leftObject_sprite) > 11:
            self.leftObject_sprite.pop()
 

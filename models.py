@@ -1,14 +1,18 @@
 import arcade.key
 from random import randint
 
+MAX_SPEED = 11
+MAX_GAP = 0.35
+
 class Object:
     def __init__(self, world, x, y):
         self.world = world
         self.x = x
         self.y = y
+        self.speed = 3
     
     def update(self, delta):
-        self.y -= World.speed
+        self.y -= self.speed
 
 class Point(Object):
     def __init__(self, world, x, y):
@@ -38,9 +42,9 @@ class Plane:
     def update(self, delta):
         if self.x != 188 and self.x != 438 and self.x != 62 and self.x != 312:
             if self.move == 1:
-                self.x += 6
+                self.x += 9
             elif self.move == 2:
-                self.x -= 6
+                self.x -= 9
         else:
             if self.move != 0:
                 self.move = 0
@@ -53,6 +57,7 @@ class World:
 
         self.time = 0
         self.speed = 3
+        self.gap = 0.85
 
         self.life = 1
         self.score = 0
@@ -76,10 +81,10 @@ class World:
         if key == arcade.key.LEFT:
             if self.leftPlane.move == 0:
                 if self.leftPlane.x == 62:
-                    self.leftPlane.x += 6 
+                    self.leftPlane.x += 9 
                     self.leftPlane.move = 1
                 else:
-                    self.leftPlane.x -= 6 
+                    self.leftPlane.x -= 9 
                     self.leftPlane.move = 2
             elif self.leftPlane.move == 1:
                 self.leftPlane.move = 2
@@ -88,10 +93,10 @@ class World:
         if key == arcade.key.RIGHT:
             if self.rightPlane.move == 0:
                 if self.rightPlane.x == 312:
-                    self.rightPlane.x += 6 
+                    self.rightPlane.x += 9 
                     self.rightPlane.move = 1
                 else:
-                    self.rightPlane.x -= 6 
+                    self.rightPlane.x -= 9 
                     self.rightPlane.move = 2
             elif self.rightPlane.move == 1:
                 self.rightPlane.move = 2
@@ -99,17 +104,17 @@ class World:
                 self.rightPlane.move = 1        
 
     def left_random(self):
-        left_pos = randint(0,10)
-        left_obj = randint(0,1)
-        if left_pos >= 0 and left_pos <= 4:
-            if left_obj == 0:
+        left_pos = randint(0,100)
+        left_obj = randint(1,100)
+        if left_pos >= 0 and left_pos <= 49:
+            if left_obj >= 1 and left_obj <= 40:
                 self.leftObject = [Point(self, 62, 800)] + self.leftObject
                 self.leftCheck = [0] + self.leftCheck
             else:
                 self.leftObject = [Death(self, 62, 800)] + self.leftObject
                 self.leftCheck = [1] + self.leftCheck
-        elif left_pos >= 4 and left_pos <= 9:
-            if left_obj == 0:
+        elif left_pos >= 50 and left_pos <= 99:
+            if left_obj >= 1 and left_obj <= 40:
                 self.leftObject = [Point(self, 188, 800)] + self.leftObject
                 self.leftCheck = [0] + self.leftCheck
             else:
@@ -142,12 +147,19 @@ class World:
 
     def left_update(self, delta):
         for obj in self.leftObject:
+            if obj.speed > 0 and obj.speed != self.speed:
+                obj.speed = self.speed
             obj.update(delta)
             if self.leftPlane.get(obj):
                 obj.y = 800
                 obj.speed = 0
                 if obj.cls == 0:
                     self.score += 1
+                    if self.score % 10 == 0:
+                        if self.speed <= MAX_SPEED:
+                            self.speed += 0.5
+                        if self.gap >= MAX_GAP:
+                            self.gap -= 0.05
                 elif obj.cls == 1:
                     self.life -= 1
                 #self.leftObject.pop()
@@ -164,14 +176,19 @@ class World:
     
     def right_update(self, delta):
         for obj in self.rightObject:
+            if obj.speed > 0 and obj.speed != self.speed:
+                obj.speed = self.speed
             obj.update(delta)
             if self.rightPlane.get(obj):
                 obj.y = 800
                 obj.speed = 0
                 if obj.cls == 0:
                     self.score += 1
-                    if self.score % 20 == 0:
-                        
+                    if self.score % 10 == 0:
+                        if self.speed <= MAX_SPEED:
+                            self.speed += 0.5
+                        if self.gap >= MAX_GAP:
+                            self.gap -= 0.05
                 elif obj.cls == 1:
                     self.life -= 1
                 #self.leftObject.pop()
@@ -188,12 +205,12 @@ class World:
         self.leftPlane.update(delta)
         self.rightPlane.update(delta)
         #print (self.leftObject)
-
+        print (self.speed)
         #if len(self.leftCheck) > 11 or len(self.leftObject) > 11:
         #    self.leftObject.pop()
         #    self.leftCheck.pop()
 
-        if self.time > 0.8:
+        if self.time > self.gap:
             self.time = 0
             self.left_random()
             self.right_random()
