@@ -44,14 +44,24 @@ class TwinWindow(arcade.Window):
         self.world.on_key_press(key, key_modifiers)
 
     def update(self, delta):
+        print (self.leftObject_sprite)
+        if len(self.leftObject_sprite) > 11:
+            self.leftObject_sprite.pop()
+            
         if self.world.time == 0:
             #if self.world.leftCreate:
                 if len(self.world.leftCheck) != 0 and len(self.world.leftObject) != 0 and self.left_len != len(self.world.leftObject):
                     self.left_len = len(self.world.leftObject)
                     if self.world.leftCheck[0] == 0:
-                        self.leftObject_sprite.append(ModelSprite('images/cookie.png',model=self.world.leftObject[0]))
+                        #self.leftObject_sprite.append(ModelSprite('images/cookie.png',model=self.world.leftObject[0]))
+                        self.leftObject_sprite = [ModelSprite('images/cookie.png',model=self.world.leftObject[0])] + self.leftObject_sprite
                     elif self.world.leftCheck[0] == 1:
-                        self.leftObject_sprite.append(ModelSprite('images/water.png',model=self.world.leftObject[0]))
+                        #self.leftObject_sprite.append(ModelSprite('images/water.png',model=self.world.leftObject[0]))
+                        self.leftObject_sprite = [ModelSprite('images/water.png',model=self.world.leftObject[0])] + self.leftObject_sprite
+                    else:
+                        self.leftObject_sprite = [ModelSprite('images/tmp.png',model=self.world.leftObject[0])] + self.leftObject_sprite
+                
+
         self.world.update(delta)
 
     def on_draw(self):
@@ -62,8 +72,13 @@ class TwinWindow(arcade.Window):
         self.leftPlane_sprite.draw()
         self.rightPlane_sprite.draw()
 
-        for leftDrop in self.leftObject_sprite:
-            leftDrop.draw()
+        for i in range(0, len(self.leftObject_sprite)):
+            if i > 10:
+                break
+            self.leftObject_sprite[i].draw()
+
+        #for leftDrop in self.leftObject_sprite:
+        #    leftDrop.draw()
         #self.point_sprite.draw()
         #self.death_sprite.draw()
 

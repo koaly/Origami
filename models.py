@@ -21,6 +21,11 @@ class Death(Object):
         super().__init__(world, x, y)
         self.cls = 1
 
+class Tmp(Object):
+    def __init__(self, world, x, y):
+        super().__init__(world, x, y)
+        self.cls = 2
+
 class Plane:
     def __init__(self, world, x, y):
         self.world = world
@@ -99,18 +104,22 @@ class World:
         self.rightPlane.update(delta)
         print (self.leftObject)
 
-        if self.time > 0.7:
+        #if len(self.leftCheck) > 11 or len(self.leftObject) > 11:
+        #    self.leftObject.pop()
+        #   self.leftCheck.pop()
+
+        if self.time > 0.8:
             self.time = 0
-            left_pos = randint(0,2)
+            left_pos = randint(0,10)
             left_obj = randint(0,1)
-            if left_pos == 0:
+            if left_pos >= 0 and left_pos <= 4:
                 if left_obj == 0:
                     self.leftObject = [Point(self, 62, 800)] + self.leftObject
                     self.leftCheck = [0] + self.leftCheck
                 else:
                     self.leftObject = [Death(self, 62, 800)] + self.leftObject
                     self.leftCheck = [1] + self.leftCheck
-            elif left_pos == 1:
+            elif left_pos >= 4 and left_pos <= 9:
                 if left_obj == 0:
                     self.leftObject = [Point(self, 188, 800)] + self.leftObject
                     self.leftCheck = [0] + self.leftCheck
@@ -118,6 +127,7 @@ class World:
                     self.leftObject = [Death(self, 188, 800)] + self.leftObject
                     self.leftCheck = [1] + self.leftCheck
             else:
+                self.leftObject = [Tmp(self, 62, 800)] + self.leftObject
                 self.leftCheck = [2] + self.leftCheck
         
         for obj in self.leftObject:
@@ -130,13 +140,15 @@ class World:
                 elif obj.cls == 1:
                     self.life -= 1
                 #self.leftObject.pop()
+                #self.leftCheck.pop()
 
             if obj.y < 10:
                 if obj.cls == 0:    
                     self.life -= 1
                 obj.y = 800
                 obj.speed = 0
-                #self.leftObject.pop
+                #self.leftObject.pop()
+                #self.leftCheck.pop()
 
         for obj in self.rightObject:
             obj.update(delta)
