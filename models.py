@@ -155,16 +155,18 @@ class World:
                 obj.speed = 0
                 if obj.cls == 0:
                     self.score += 1
-                    if self.score % 10 == 0:
+                    if self.score % 50 == 0:
+                        self.life += 1
+                    if self.score % 15 == 0:
                         if self.speed <= MAX_SPEED:
                             self.speed += 0.5
                         if self.gap >= MAX_GAP:
                             self.gap -= 0.05
                 elif obj.cls == 1:
-                    self.life -= 1
+                    if self.life > 0:  
+                        self.life -= 1
                 #self.leftObject.pop()
                 #self.leftCheck.pop()
-
             if obj.y < 10:
                 if obj.cls == 0:
                     if self.life > 0:  
@@ -184,19 +186,23 @@ class World:
                 obj.speed = 0
                 if obj.cls == 0:
                     self.score += 1
-                    if self.score % 10 == 0:
+                    if self.score % 50 == 0:
+                        self.life += 1
+                    if self.score % 15 == 0:
                         if self.speed <= MAX_SPEED:
                             self.speed += 0.5
                         if self.gap >= MAX_GAP:
                             self.gap -= 0.05
                 elif obj.cls == 1:
-                    self.life -= 1
+                    if self.life > 0:  
+                        self.life -= 1
                 #self.leftObject.pop()
                 #self.leftCheck.pop()
 
             if obj.y < 10:
                 if obj.cls == 0:    
-                    self.life -= 1
+                    if self.life > 0:  
+                        self.life -= 1
                 obj.y = 800
                 obj.speed = 0
 
