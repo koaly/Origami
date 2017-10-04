@@ -115,7 +115,7 @@ class TwinWindow(arcade.Window):
             if self.world.score >= 100:
                 arcade.draw_text(str(self.world.score), self.width//2-80, self.height//2, arcade.color.WHITE, 80)
             elif self.world.score >= 10:
-                arcade.draw_text(str(self.world.score), self.width//2-50, self.height//2, arcade.color.WHITE, 80)
+                arcade.draw_text(str(self.world.score), self.width//2-55, self.height//2, arcade.color.WHITE, 80)
             else:
                 arcade.draw_text(str(self.world.score), self.width//2-25, self.height//2, arcade.color.WHITE, 80)
  
