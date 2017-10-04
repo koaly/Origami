@@ -60,7 +60,7 @@ class World:
         self.gap = 0.85
 
         self.life = 1
-        self.score = 10
+        self.score = 0
 
         self.leftObject = []
         self.rightObject = []

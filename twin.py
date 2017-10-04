@@ -1,4 +1,5 @@
 import arcade
+import sys
 from models import *
  
 SCREEN_WIDTH = 500
@@ -39,6 +40,8 @@ class TwinWindow(arcade.Window):
 
         self.scoreboard = arcade.Sprite('images/score.png')
         self.scoreboard.set_position(250,height//2)
+
+        self.scoreCheck = False
         #self.point_sprite = ModelSprite('images/cookie.png',model=self.world.point)
         #self.death_sprite = ModelSprite('images/water.png',model=self.world.death)
 
@@ -112,12 +115,21 @@ class TwinWindow(arcade.Window):
 
         if self.world.life == 0:
             self.scoreboard.draw()
-            if self.world.score >= 100:
-                arcade.draw_text(str(self.world.score), self.width//2-80, self.height//2, arcade.color.WHITE, 80)
-            elif self.world.score >= 10:
-                arcade.draw_text(str(self.world.score), self.width//2-55, self.height//2, arcade.color.WHITE, 80)
+            f = open('highscore.log', 'r')
+            highscore = f.readline()
+            if self.world.score > int(highscore) or self.scoreCheck:
+                self.scoreCheck = True
+                arcade.draw_text('New Highscore!', self.width//2-85, self.height//2-75, arcade.color.WHITE, 20)
+                f = open('highscore.log', 'w')
+                f.write(str(self.world.score))
             else:
-                arcade.draw_text(str(self.world.score), self.width//2-25, self.height//2, arcade.color.WHITE, 80)
+                arcade.draw_text('Highscore: ' + highscore, self.width//2-100, self.height//2-75, arcade.color.WHITE, 20)
+            if self.world.score >= 100:
+                arcade.draw_text(str(self.world.score), self.width//2-80, self.height//2-10, arcade.color.WHITE, 80)
+            elif self.world.score >= 10:
+                arcade.draw_text(str(self.world.score), self.width//2-55, self.height//2-10, arcade.color.WHITE, 80)
+            else:
+                arcade.draw_text(str(self.world.score), self.width//2-25, self.height//2-10, arcade.color.WHITE, 80)
  
 def main():
     window = TwinWindow(SCREEN_WIDTH, SCREEN_HEIGHT)
