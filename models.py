@@ -2,7 +2,7 @@ import arcade.key
 from random import randint
 
 MAX_SPEED = 11
-MAX_GAP = 0.35
+MAX_GAP = 0.3
 
 class Object:
     def __init__(self, world, x, y):
@@ -57,7 +57,8 @@ class World:
 
         self.time = 0
         self.speed = 3
-        self.gap = 0.85
+        self.gap = 0.9
+        print (self.speed)
 
         self.life = 1
         self.score = 0
@@ -160,19 +161,22 @@ class World:
                     if self.score % 15 == 0:
                         if self.speed <= MAX_SPEED:
                             self.speed += 0.5
+                            print (self.speed)
                         if self.gap >= MAX_GAP:
                             self.gap -= 0.05
                 elif obj.cls == 1:
                     if self.life > 0:  
                         self.life -= 1
+                del obj
                 #self.leftObject.pop()
                 #self.leftCheck.pop()
-            if obj.y < 10:
+            elif obj.y < 10:
                 if obj.cls == 0:
                     if self.life > 0:  
                         self.life -= 1
                 obj.y = 800
                 obj.speed = 0
+                del obj
                 #self.leftObject.pop()
                 #self.leftCheck.pop()
     
@@ -191,20 +195,23 @@ class World:
                     if self.score % 15 == 0:
                         if self.speed <= MAX_SPEED:
                             self.speed += 0.5
+                            print (self.speed)
                         if self.gap >= MAX_GAP:
                             self.gap -= 0.05
                 elif obj.cls == 1:
                     if self.life > 0:  
                         self.life -= 1
+                del obj
                 #self.leftObject.pop()
                 #self.leftCheck.pop()
 
-            if obj.y < 10:
+            elif obj.y < 10:
                 if obj.cls == 0:    
                     if self.life > 0:  
                         self.life -= 1
                 obj.y = 800
                 obj.speed = 0
+                del obj
 
     def update(self, delta):
         self.time += delta
@@ -212,7 +219,6 @@ class World:
             self.leftPlane.update(delta)
             self.rightPlane.update(delta)
             #print (self.leftObject)
-            print (self.speed)
             #if len(self.leftCheck) > 11 or len(self.leftObject) > 11:
             #    self.leftObject.pop()
             #    self.leftCheck.pop()
