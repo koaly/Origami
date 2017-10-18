@@ -143,20 +143,20 @@ class World:
         right_pos = randint(0,100)
         right_obj = randint(1,100)
         if right_pos >= 0 and right_pos <= 49:
-            if right_obj >= 1 and right_obj <= 40:
+            if right_obj >= 1 and right_obj <= 50:
                 self.rightObject = [Point(self, 312, 800)] + self.rightObject
                 self.rightCheck = [0] + self.rightCheck
-            elif right_obj >= 41 and right_obj <= 90:
+            elif right_obj >= 51 and right_obj <= 90:
                 self.rightObject = [Death(self, 312, 800)] + self.rightObject
                 self.rightCheck = [1] + self.rightCheck
             else:
                 self.rightObject = [Fake(self, 312, 800)] + self.rightObject
                 self.rightCheck = [3] + self.rightCheck
         elif right_pos >= 50 and right_pos <= 99:
-            if right_obj >= 1 and right_obj <= 40:
+            if right_obj >= 1 and right_obj <= 50:
                 self.rightObject = [Point(self, 438, 800)] + self.rightObject
                 self.rightCheck = [0] + self.rightCheck
-            elif right_obj >= 41 and right_obj <= 90:
+            elif right_obj >= 51 and right_obj <= 90:
                 self.rightObject = [Death(self, 438, 800)] + self.rightObject
                 self.rightCheck = [1] + self.rightCheck
             else:
