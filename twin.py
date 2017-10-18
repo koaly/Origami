@@ -55,11 +55,21 @@ class TwinWindow(arcade.Window):
 
         if len(self.rightObject_sprite) > 11:
             self.rightObject_sprite.pop()
-            
+        
+        if self.world.leftTrigger:
+            if self.world.leftCheck[0] == 1:
+                self.leftObject_sprite = [ModelSprite('images/water.png',model=self.world.leftObject[0])] + self.leftObject_sprite
+            self.world.leftTrigger = False
+        
+        if self.world.rightTrigger:
+            if self.world.rightCheck[0] == 1:
+                self.rightObject_sprite = [ModelSprite('images/water.png',model=self.world.rightObject[0])] + self.rightObject_sprite
+            self.world.rightTrigger = False
+
         if self.world.time == 0:
             if len(self.world.leftCheck) != 0 and len(self.world.leftObject) != 0 and self.left_len != len(self.world.leftObject):
                 self.left_len = len(self.world.leftObject)
-                if self.world.leftCheck[0] == 0:
+                if self.world.leftCheck[0] == 0 or self.world.leftCheck[0] == 3:
                     #self.leftObject_sprite.append(ModelSprite('images/cookie.png',model=self.world.leftObject[0]))
                     self.leftObject_sprite = [ModelSprite('images/cookie.png',model=self.world.leftObject[0])] + self.leftObject_sprite
                 elif self.world.leftCheck[0] == 1:
@@ -70,7 +80,7 @@ class TwinWindow(arcade.Window):
        
             if len(self.world.rightCheck) != 0 and len(self.world.rightObject) != 0 and self.right_len != len(self.world.rightObject):
                 self.right_len = len(self.world.rightObject)
-                if self.world.rightCheck[0] == 0:
+                if self.world.rightCheck[0] == 0 or self.world.rightCheck[0] == 3:
                     #self.leftObject_sprite.append(ModelSprite('images/cookie.png',model=self.world.leftObject[0]))
                     self.rightObject_sprite = [ModelSprite('images/cookie.png',model=self.world.rightObject[0])] + self.rightObject_sprite
                 elif self.world.rightCheck[0] == 1:

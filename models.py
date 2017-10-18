@@ -29,6 +29,11 @@ class Tmp(Object):
         super().__init__(world, x, y)
         self.cls = 2
 
+class Fake(Object):
+    def __init__(self, world, x, y):
+        super().__init__(world, x, y)
+        self.cls = 3
+
 class Plane:
     def __init__(self, world, x, y):
         self.world = world
@@ -62,6 +67,9 @@ class World:
 
         self.life = 1
         self.score = 0
+
+        self.leftTrigger = False
+        self.rightTrigger = False
 
         self.leftObject = []
         self.rightObject = []
@@ -111,37 +119,49 @@ class World:
             if left_obj >= 1 and left_obj <= 40:
                 self.leftObject = [Point(self, 62, 800)] + self.leftObject
                 self.leftCheck = [0] + self.leftCheck
-            else:
+            elif left_obj >= 41 and left_obj <= 90:
                 self.leftObject = [Death(self, 62, 800)] + self.leftObject
                 self.leftCheck = [1] + self.leftCheck
+            else:
+                self.leftObject = [Fake(self, 62, 800)] + self.leftObject
+                self.leftCheck = [3] + self.leftCheck
         elif left_pos >= 50 and left_pos <= 99:
             if left_obj >= 1 and left_obj <= 40:
                 self.leftObject = [Point(self, 188, 800)] + self.leftObject
                 self.leftCheck = [0] + self.leftCheck
-            else:
+            elif left_obj >= 141 and left_obj <= 90:
                 self.leftObject = [Death(self, 188, 800)] + self.leftObject
                 self.leftCheck = [1] + self.leftCheck
+            else:
+                self.leftObject = [Fake(self, 188, 800)] + self.leftObject
+                self.leftCheck = [3] + self.leftCheck
         else:
             self.leftObject = [Tmp(self, 62, 800)] + self.leftObject
             self.leftCheck = [2] + self.leftCheck
     
     def right_random(self):
-        right_pos = randint(0,10)
-        right_obj = randint(0,1)
-        if right_pos >= 0 and right_pos <= 4:
-            if right_obj == 0:
+        right_pos = randint(0,100)
+        right_obj = randint(1,100)
+        if right_pos >= 0 and right_pos <= 49:
+            if right_obj >= 1 and right_obj <= 40:
                 self.rightObject = [Point(self, 312, 800)] + self.rightObject
                 self.rightCheck = [0] + self.rightCheck
-            else:
+            elif right_obj >= 41 and right_obj <= 90:
                 self.rightObject = [Death(self, 312, 800)] + self.rightObject
                 self.rightCheck = [1] + self.rightCheck
-        elif right_pos >= 4 and right_pos <= 9:
-            if right_obj == 0:
+            else:
+                self.rightObject = [Fake(self, 312, 800)] + self.rightObject
+                self.rightCheck = [3] + self.rightCheck
+        elif right_pos >= 50 and right_pos <= 99:
+            if right_obj >= 1 and right_obj <= 40:
                 self.rightObject = [Point(self, 438, 800)] + self.rightObject
                 self.rightCheck = [0] + self.rightCheck
-            else:
+            elif right_obj >= 41 and right_obj <= 90:
                 self.rightObject = [Death(self, 438, 800)] + self.rightObject
                 self.rightCheck = [1] + self.rightCheck
+            else:
+                self.rightObject = [Fake(self, 438, 800)] + self.rightObject
+                self.rightCheck = [3] + self.rightCheck
         else:
             self.rightObject = [Tmp(self, 312, 800)] + self.rightObject
             self.rightCheck = [2] + self.rightCheck
@@ -179,6 +199,14 @@ class World:
                 del obj
                 #self.leftObject.pop()
                 #self.leftCheck.pop()
+            elif obj.cls == 3:
+                if obj.y <= 450:
+                    self.leftObject = [Death(self, obj.x, obj.y)] + self.leftObject
+                    self.leftCheck = [1] + self.leftCheck
+                    self.leftTrigger = True
+                    obj.y = 800
+                    obj.speed = 0
+                    del obj
     
     def right_update(self, delta):
         for obj in self.rightObject:
@@ -204,7 +232,6 @@ class World:
                 del obj
                 #self.leftObject.pop()
                 #self.leftCheck.pop()
-
             elif obj.y < 10:
                 if obj.cls == 0:    
                     if self.life > 0:  
@@ -212,6 +239,14 @@ class World:
                 obj.y = 800
                 obj.speed = 0
                 del obj
+            elif obj.cls == 3:
+                if obj.y <= 450:
+                    self.rightObject = [Death(self, obj.x, obj.y)] + self.rightObject
+                    self.rightCheck = [1] + self.rightCheck
+                    self.rightTrigger = True
+                    obj.y = 800
+                    obj.speed = 0
+                    del obj
 
     def update(self, delta):
         self.time += delta
