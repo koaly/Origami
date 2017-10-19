@@ -198,6 +198,7 @@ class World:
                 if obj.cls == 0:
                     if self.life > 0:
                         self.life -= 1
+                self.leftDelete = True
                 obj.y = 800
                 obj.speed = 0
                 del obj
@@ -241,6 +242,7 @@ class World:
                 if obj.cls == 0:
                     if self.life > 0:
                         self.life -= 1
+                self.rightDelete = True
                 obj.y = 800
                 obj.speed = 0
                 del obj

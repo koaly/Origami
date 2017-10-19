@@ -30,6 +30,10 @@ class TwinWindow(arcade.Window):
         self.background = arcade.Sprite('images/bg.png')
         self.background.set_position(250,375)
 
+        self.bgm = arcade.sound.load_sound('sounds/bgm.mp3')
+        arcade.sound.play_sound(self.bgm)
+        self.deadSound = True
+
         self.leftPlane_sprite = ModelSprite('images/plane.png',model=self.world.leftPlane)
         self.rightPlane_sprite = ModelSprite('images/plane.png',model=self.world.rightPlane)
         self.leftObject_sprite = []
@@ -42,6 +46,7 @@ class TwinWindow(arcade.Window):
         self.scoreboard.set_position(250,height//2)
 
         self.scoreCheck = False
+
         #self.point_sprite = ModelSprite('images/cookie.png',model=self.world.point)
         #self.death_sprite = ModelSprite('images/water.png',model=self.world.death)
 
@@ -50,11 +55,11 @@ class TwinWindow(arcade.Window):
 
     def update(self, delta):
         #print (self.leftObject_sprite)
-        if len(self.leftObject_sprite) > 11 or self.world.leftDelete:
+        if len(self.leftObject_sprite) > 8 or self.world.leftDelete:
            self.leftObject_sprite.pop()
            self.world.leftDelete = False
 
-        if len(self.rightObject_sprite) > 11 or self.world.rightDelete:
+        if len(self.rightObject_sprite) > 8 or self.world.rightDelete:
             self.rightObject_sprite.pop()
             self.world.rightDelete = False
 
@@ -103,12 +108,12 @@ class TwinWindow(arcade.Window):
         self.rightPlane_sprite.draw()
 
         for i in range(0, len(self.leftObject_sprite)):
-            if i > 10:
+            if i > 7:
                 break
             self.leftObject_sprite[i].draw()
 
         for i in range(0, len(self.rightObject_sprite)):
-            if i > 10:
+            if i > 7:
                 break
             self.rightObject_sprite[i].draw()
 
@@ -126,6 +131,10 @@ class TwinWindow(arcade.Window):
         arcade.draw_text(str(self.world.life), 8, self.height - 30, arcade.color.WHITE, 20)
 
         if self.world.life == 0:
+            #if self.deadSound:
+            self.dead = arcade.sound.load_sound('sounds/noooo.mp3')
+            arcade.sound.play_sound(self.dead)
+            self.deadSound = False
             self.scoreboard.draw()
             f = open('highscore.log', 'r')
             highscore = f.readline()
