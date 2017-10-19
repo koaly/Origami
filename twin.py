@@ -1,20 +1,20 @@
 import arcade
 import sys
 from models import *
- 
+
 SCREEN_WIDTH = 500
 SCREEN_HEIGHT = 750
- 
+
 class ModelSprite(arcade.Sprite):
     def __init__(self, *args, **kwargs):
         self.model = kwargs.pop('model', None)
- 
+
         super().__init__(*args, **kwargs)
- 
+
     def sync_with_model(self):
         if self.model:
             self.set_position(self.model.x, self.model.y)
- 
+
     def draw(self):
         self.sync_with_model()
         super().draw()
@@ -22,14 +22,14 @@ class ModelSprite(arcade.Sprite):
 class TwinWindow(arcade.Window):
     def __init__(self, width, height):
         super().__init__(width, height)
- 
+
         arcade.set_background_color(arcade.color.BLACK)
-        
+
         self.world = World(SCREEN_WIDTH, SCREEN_HEIGHT)
 
         self.background = arcade.Sprite('images/bg.png')
         self.background.set_position(250,375)
- 
+
         self.leftPlane_sprite = ModelSprite('images/plane.png',model=self.world.leftPlane)
         self.rightPlane_sprite = ModelSprite('images/plane.png',model=self.world.rightPlane)
         self.leftObject_sprite = []
@@ -50,17 +50,19 @@ class TwinWindow(arcade.Window):
 
     def update(self, delta):
         #print (self.leftObject_sprite)
-        if len(self.leftObject_sprite) > 11:
+        if len(self.leftObject_sprite) > 11 or self.world.leftDelete:
            self.leftObject_sprite.pop()
+           self.world.leftDelete = False
 
-        if len(self.rightObject_sprite) > 11:
+        if len(self.rightObject_sprite) > 11 or self.world.rightDelete:
             self.rightObject_sprite.pop()
-        
+            self.world.rightDelete = False
+
         if self.world.leftTrigger:
             if self.world.leftCheck[0] == 1:
                 self.leftObject_sprite = [ModelSprite('images/water.png',model=self.world.leftObject[0])] + self.leftObject_sprite
             self.world.leftTrigger = False
-        
+
         if self.world.rightTrigger:
             if self.world.rightCheck[0] == 1:
                 self.rightObject_sprite = [ModelSprite('images/water.png',model=self.world.rightObject[0])] + self.rightObject_sprite
@@ -77,7 +79,7 @@ class TwinWindow(arcade.Window):
                     self.leftObject_sprite = [ModelSprite('images/water.png',model=self.world.leftObject[0])] + self.leftObject_sprite
                 else:
                     self.leftObject_sprite = [ModelSprite('images/tmp.png',model=self.world.leftObject[0])] + self.leftObject_sprite
-       
+
             if len(self.world.rightCheck) != 0 and len(self.world.rightObject) != 0 and self.right_len != len(self.world.rightObject):
                 self.right_len = len(self.world.rightObject)
                 if self.world.rightCheck[0] == 0 or self.world.rightCheck[0] == 3:
@@ -88,7 +90,7 @@ class TwinWindow(arcade.Window):
                     self.rightObject_sprite = [ModelSprite('images/water.png',model=self.world.rightObject[0])] + self.rightObject_sprite
                 else:
                     self.rightObject_sprite = [ModelSprite('images/tmp.png',model=self.world.rightObject[0])] + self.rightObject_sprite
-                
+
 
         self.world.update(delta)
 
@@ -96,7 +98,7 @@ class TwinWindow(arcade.Window):
         arcade.start_render()
 
         self.background.draw()
- 
+
         self.leftPlane_sprite.draw()
         self.rightPlane_sprite.draw()
 
@@ -140,11 +142,11 @@ class TwinWindow(arcade.Window):
                 arcade.draw_text(str(self.world.score), self.width//2-55, self.height//2-10, arcade.color.WHITE, 80)
             else:
                 arcade.draw_text(str(self.world.score), self.width//2-25, self.height//2-10, arcade.color.WHITE, 80)
- 
+
 def main():
     window = TwinWindow(SCREEN_WIDTH, SCREEN_HEIGHT)
     arcade.set_window(window)
     arcade.run()
- 
+
 if __name__ == '__main__':
     main()

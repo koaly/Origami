@@ -10,7 +10,7 @@ class Object:
         self.x = x
         self.y = y
         self.speed = 3
-    
+
     def update(self, delta):
         self.y -= self.speed
 
@@ -43,7 +43,7 @@ class Plane:
 
     def get(self, other):
          return (abs(self.x - other.x) <= 30) and (abs(self.y - other.y) <= 30)
- 
+
     def update(self, delta):
         if self.x != 188 and self.x != 438 and self.x != 62 and self.x != 312:
             if self.move == 1:
@@ -53,7 +53,7 @@ class Plane:
         else:
             if self.move != 0:
                 self.move = 0
-    
+
 
 class World:
     def __init__(self, width, height):
@@ -67,6 +67,9 @@ class World:
 
         self.life = 1
         self.score = 0
+
+        self.leftDelete = False
+        self.rightDelete = False
 
         self.leftTrigger = False
         self.rightTrigger = False
@@ -85,15 +88,15 @@ class World:
 
         #self.point = Point(self, 62, 770)
         #self.death = Death(self, 312, 770)
- 
+
     def on_key_press(self, key, key_modifiers):
         if key == arcade.key.LEFT:
             if self.leftPlane.move == 0:
                 if self.leftPlane.x == 62:
-                    self.leftPlane.x += 9 
+                    self.leftPlane.x += 9
                     self.leftPlane.move = 1
                 else:
-                    self.leftPlane.x -= 9 
+                    self.leftPlane.x -= 9
                     self.leftPlane.move = 2
             elif self.leftPlane.move == 1:
                 self.leftPlane.move = 2
@@ -102,15 +105,15 @@ class World:
         if key == arcade.key.RIGHT:
             if self.rightPlane.move == 0:
                 if self.rightPlane.x == 312:
-                    self.rightPlane.x += 9 
+                    self.rightPlane.x += 9
                     self.rightPlane.move = 1
                 else:
-                    self.rightPlane.x -= 9 
+                    self.rightPlane.x -= 9
                     self.rightPlane.move = 2
             elif self.rightPlane.move == 1:
                 self.rightPlane.move = 2
             else:
-                self.rightPlane.move = 1        
+                self.rightPlane.move = 1
 
     def left_random(self):
         left_pos = randint(0,100)
@@ -138,7 +141,7 @@ class World:
         else:
             self.leftObject = [Tmp(self, 62, 800)] + self.leftObject
             self.leftCheck = [2] + self.leftCheck
-    
+
     def right_random(self):
         right_pos = randint(0,100)
         right_obj = randint(1,100)
@@ -172,6 +175,7 @@ class World:
                 obj.speed = self.speed
             obj.update(delta)
             if self.leftPlane.get(obj):
+                self.leftDelete = True
                 obj.y = 800
                 obj.speed = 0
                 if obj.cls == 0:
@@ -185,14 +189,14 @@ class World:
                         if self.gap >= MAX_GAP:
                             self.gap -= 0.05
                 elif obj.cls == 1:
-                    if self.life > 0:  
+                    if self.life > 0:
                         self.life -= 1
                 del obj
                 #self.leftObject.pop()
                 #self.leftCheck.pop()
             elif obj.y < 10:
                 if obj.cls == 0:
-                    if self.life > 0:  
+                    if self.life > 0:
                         self.life -= 1
                 obj.y = 800
                 obj.speed = 0
@@ -207,13 +211,14 @@ class World:
                     obj.y = 800
                     obj.speed = 0
                     del obj
-    
+
     def right_update(self, delta):
         for obj in self.rightObject:
             if obj.speed > 0 and obj.speed != self.speed:
                 obj.speed = self.speed
             obj.update(delta)
             if self.rightPlane.get(obj):
+                self.rightDelete = True
                 obj.y = 800
                 obj.speed = 0
                 if obj.cls == 0:
@@ -227,14 +232,14 @@ class World:
                         if self.gap >= MAX_GAP:
                             self.gap -= 0.05
                 elif obj.cls == 1:
-                    if self.life > 0:  
+                    if self.life > 0:
                         self.life -= 1
                 del obj
                 #self.leftObject.pop()
                 #self.leftCheck.pop()
             elif obj.y < 10:
-                if obj.cls == 0:    
-                    if self.life > 0:  
+                if obj.cls == 0:
+                    if self.life > 0:
                         self.life -= 1
                 obj.y = 800
                 obj.speed = 0
@@ -247,6 +252,7 @@ class World:
                     obj.y = 800
                     obj.speed = 0
                     del obj
+
 
     def update(self, delta):
         self.time += delta
@@ -265,6 +271,6 @@ class World:
 
             self.left_update(delta)
             self.right_update(delta)
-        
+
         #self.point.update(delta)
         #self.death.update(delta)
