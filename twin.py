@@ -30,9 +30,9 @@ class TwinWindow(arcade.Window):
         self.background = arcade.Sprite('images/bg.png')
         self.background.set_position(250,375)
 
-        self.bgm = arcade.sound.load_sound('sounds/bgm.mp3')
-        arcade.sound.play_sound(self.bgm)
-        self.deadSound = True
+        #self.bgm = arcade.sound.load_sound('sounds/bgm.mp3')
+        #arcade.sound.play_sound(self.bgm)
+        #self.deadSound = True
 
         self.leftPlane_sprite = ModelSprite('images/plane.png',model=self.world.leftPlane)
         self.rightPlane_sprite = ModelSprite('images/plane.png',model=self.world.rightPlane)
@@ -132,8 +132,8 @@ class TwinWindow(arcade.Window):
 
         if self.world.life == 0:
             #if self.deadSound:
-            self.dead = arcade.sound.load_sound('sounds/noooo.mp3')
-            arcade.sound.play_sound(self.dead)
+            #self.dead = arcade.sound.load_sound('sounds/noooo.mp3')
+            #arcade.sound.play_sound(self.dead)
             self.deadSound = False
             self.scoreboard.draw()
             f = open('highscore.log', 'r')
